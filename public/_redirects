@@ -1,3 +1,2 @@
-# Replace the backend domain below with your deployed backend URL before Netlify deploy.
-/api/*  https://your-backend-domain.onrender.com/api/:splat  200
+/api/*  https://campush-event-hub-backend.onrender.com/api/:splat  200
 /*      /index.html                                         200
