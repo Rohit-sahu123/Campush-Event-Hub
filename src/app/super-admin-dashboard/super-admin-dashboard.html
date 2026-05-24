@@ -1,35 +1,78 @@
-<div class="container">
+<div class="container" [class.mobile-menu-active]="mobileMenuOpen">
 
   <!-- Header -->
-  <header class="luxury-header">
-    <div class="header-inner">
+  <header class="landing-header">
+    <div class="header-row">
       <a class="brand-block" routerLink="/super-admin-dashboard" aria-label="Go to super admin dashboard">
         <img class="brand-logo" src="/icon2.png" alt="Campus Event Hub">
-        <span class="brand-name">
-          <span class="brand-campus">Campus</span>
-          <span class="brand-eventhub">Event Hub</span>
-        </span>
+        <div class="brand-copy">
+          <span class="brand-name">
+            <span class="brand-campus">Campus</span>
+            <span class="brand-eventhub">Event Hub</span>
+          </span>
+        </div>
       </a>
 
-      <nav class="header-nav" aria-label="Super admin navigation">
+      <button
+        class="hamburger-btn"
+        type="button"
+        [class.open]="mobileMenuOpen"
+        (click)="toggleMobileMenu()"
+        aria-label="Toggle super admin navigation"
+        [attr.aria-expanded]="mobileMenuOpen"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+
+      <nav class="nav-links desktop-nav" aria-label="Super admin navigation">
         <a class="nav-link" routerLink="/super-admin-dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
         <a class="nav-link" routerLink="/super-admin/students" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Students</a>
         <a class="nav-link" routerLink="/super-admin/admins" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Admins</a>
         <a class="nav-link" routerLink="/super-admin/events" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Events</a>
       </nav>
 
-      <div class="header-actions">
-        <button class="action-btn export-btn" type="button">
+      <div class="nav-actions desktop-actions">
+        <button class="header-btn header-btn-secondary" type="button">
           <i class="fa-solid fa-download"></i>
           Export Reports
         </button>
-        <button class="action-btn logout-btn" type="button" (click)="logout()">
+        <button class="header-btn header-btn-primary" type="button" (click)="logout()">
           <i class="fa-solid fa-right-from-bracket"></i>
           Logout
         </button>
       </div>
+
+      <div class="mobile-nav-container" [class.open]="mobileMenuOpen">
+        <nav class="nav-links" aria-label="Super admin mobile navigation">
+          <a class="nav-link" routerLink="/super-admin-dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu()">Dashboard</a>
+          <a class="nav-link" routerLink="/super-admin/students" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu()">Students</a>
+          <a class="nav-link" routerLink="/super-admin/admins" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu()">Admins</a>
+          <a class="nav-link" routerLink="/super-admin/events" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu()">Events</a>
+        </nav>
+
+        <div class="nav-actions">
+          <button class="header-btn header-btn-secondary" type="button" (click)="closeMobileMenu()">
+            <i class="fa-solid fa-download"></i>
+            Export Reports
+          </button>
+          <button class="header-btn header-btn-primary" type="button" (click)="closeMobileMenu(); logout()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+          </button>
+        </div>
+      </div>
     </div>
   </header>
+
+  <button
+    class="mobile-menu-backdrop"
+    type="button"
+    *ngIf="mobileMenuOpen"
+    (click)="closeMobileMenu()"
+    aria-label="Close navigation menu"
+  ></button>
 
   <!-- Stats Cards -->
   <div class="stats">
@@ -94,14 +137,14 @@
             <div [class]="getActivityIconClass(admin.activityLevel)">
               <i class="fa-solid fa-user-tie"></i>
             </div>
-            <div>
+            <div class="event-copy">
               <!-- Name + college/department -->
               <b class="event-title">
                 {{ admin.name }}
-                <span *ngIf="admin.department"> ({{ admin.department }})</span>
-                <span *ngIf="!admin.department && admin.college"> — {{ admin.college }}</span>
+                <span class="event-context" *ngIf="admin.department"> ({{ admin.department }})</span>
+                <span class="event-context" *ngIf="!admin.department && admin.college"> — {{ admin.college }}</span>
               </b>
-              <span>
+              <span class="event-meta">
                 Created {{ admin.eventsCreated }} event{{ admin.eventsCreated !== 1 ? 's' : '' }}
                 &middot;
                 Last active {{ admin.lastActiveLabel }}
@@ -153,13 +196,13 @@
     <div class="approval-list" *ngIf="filteredAdminApprovalRequests.length > 0">
       <div class="approval-item" *ngFor="let request of filteredAdminApprovalRequests">
         <div class="approval-grid">
-          <p><strong>Name:</strong> {{ request.name }}</p>
-          <p><strong>User ID:</strong> {{ request.userId }}</p>
-          <p><strong>Email:</strong> {{ request.email }}</p>
-          <p><strong>College:</strong> {{ request.college || 'Not provided' }}</p>
-          <p><strong>Role:</strong> {{ request.role }}</p>
-          <p><strong>Submitted:</strong> {{ request.createdAt | date:'medium' }}</p>
-          <p>
+          <p class="approval-field"><strong>Name:</strong> {{ request.name }}</p>
+          <p class="approval-field"><strong>User ID:</strong> {{ request.userId }}</p>
+          <p class="approval-field"><strong>Email:</strong> {{ request.email }}</p>
+          <p class="approval-field"><strong>College:</strong> {{ request.college || 'Not provided' }}</p>
+          <p class="approval-field"><strong>Role:</strong> {{ request.role }}</p>
+          <p class="approval-field"><strong>Submitted:</strong> {{ request.createdAt | date:'medium' }}</p>
+          <p class="approval-field">
             <strong>Status:</strong>
             <span class="status-chip"
               [class.pending]="request.status === 'pending'"
@@ -168,7 +211,7 @@
               {{ request.status }}
             </span>
           </p>
-          <p *ngIf="request.status === 'rejected'">
+          <p class="approval-field" *ngIf="request.status === 'rejected'">
             <strong>Rejection Reason:</strong> {{ request.rejectionReason || 'No reason provided' }}
           </p>
         </div>

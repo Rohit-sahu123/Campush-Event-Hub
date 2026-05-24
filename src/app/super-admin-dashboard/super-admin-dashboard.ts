@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
@@ -41,6 +41,7 @@ export class SuperAdminDashboard implements OnInit {
   totalAdmins = 0;
   totalEvents = 0;
   totalStudents = 0;
+  mobileMenuOpen = false;
   adminApprovalRequests: AdminRequestItem[] = [];
   statusFilter: 'all' | 'pending' | 'approved' | 'rejected' = 'all';
   searchTerm = '';
@@ -214,7 +215,30 @@ export class SuperAdminDashboard implements OnInit {
     });
   }
 
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen = false;
+  }
+
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    if (window.innerWidth > 991 && this.mobileMenuOpen) {
+      this.closeMobileMenu();
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscapeKey(): void {
+    if (this.mobileMenuOpen) {
+      this.closeMobileMenu();
+    }
+  }
+
   logout() {
+    this.closeMobileMenu();
     this.auth.logout();
     this.router.navigate(['/login']);
   }
