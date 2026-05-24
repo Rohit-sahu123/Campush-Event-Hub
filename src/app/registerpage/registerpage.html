@@ -73,7 +73,11 @@
                   [(ngModel)]="user.password"
                   name="password"
                   required>
-                <button type="button" class="password-toggle" (click)="showPassword = !showPassword">
+                <button
+                  type="button"
+                  class="password-toggle"
+                  [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+                  (click)="showPassword = !showPassword">
                   <i class="fa-solid" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
                 </button>
               </div>
@@ -87,7 +91,11 @@
                   [(ngModel)]="user.confirmPassword"
                   name="confirmPassword"
                   required>
-                <button type="button" class="password-toggle" (click)="showConfirmPassword = !showConfirmPassword">
+                <button
+                  type="button"
+                  class="password-toggle"
+                  [attr.aria-label]="showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'"
+                  (click)="showConfirmPassword = !showConfirmPassword">
                   <i class="fa-solid" [class.fa-eye]="!showConfirmPassword" [class.fa-eye-slash]="showConfirmPassword"></i>
                 </button>
               </div>

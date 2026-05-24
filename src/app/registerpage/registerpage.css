@@ -489,23 +489,29 @@ h1 {
 .password-box input {
   position: relative;
   z-index: 1;
-  padding-right: 80px;
+  padding-right: 52px;
 }
 
 .password-toggle {
   position: absolute;
   top: 50%;
   right: 12px;
+  left: auto;
   transform: translateY(-50%);
-  width: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px !important;
+  min-width: 36px;
   height: 36px;
+  margin-top: 0;
   padding: 0;
   border: none;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.96);
   color: #4254da;
   font-size: 1rem;
-  box-shadow: 0 6px 16px rgba(66, 84, 218, 0.16);
+  box-shadow: none;
   cursor: pointer;
   z-index: 10;
   pointer-events: auto;

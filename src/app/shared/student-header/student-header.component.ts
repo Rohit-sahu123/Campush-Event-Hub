@@ -122,6 +122,7 @@ export class StudentHeaderComponent {
   }
 
   openProfile(): void {
+    this.closeMobileMenu();
     if (this.activeTab === 'profile') {
       return;
     }
@@ -129,6 +130,7 @@ export class StudentHeaderComponent {
   }
 
   onNotificationClick(event: Event): void {
+    this.closeMobileMenu();
     if (this.notificationMode === 'dropdown') {
       event.stopPropagation();
       this.notificationToggle.emit(event);
@@ -140,6 +142,7 @@ export class StudentHeaderComponent {
 
   onViewMore(event?: Event): void {
     event?.stopPropagation();
+    this.closeMobileMenu();
     this.viewMoreNotifications.emit();
   }
 
@@ -152,6 +155,7 @@ export class StudentHeaderComponent {
   }
 
   logout(): void {
+    this.closeMobileMenu();
     this.auth.logout();
     this.router.navigate(['/login']);
   }

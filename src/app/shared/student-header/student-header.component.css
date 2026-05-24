@@ -717,10 +717,108 @@
   }
 
   .mobile-dropdown {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    width: min(340px, calc(100vw - 32px));
-    z-index: 120;
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 84px);
+    left: 12px;
+    right: 12px;
+    width: auto;
+    min-height: 0;
+    max-height: min(72vh, calc(100dvh - 104px));
+    padding: 0.85rem;
+    border-radius: 22px;
+    z-index: 130;
+  }
+
+  .mobile-dropdown .notification-dropdown-head {
+    gap: 0.75rem;
+    padding-bottom: 0.7rem;
+  }
+
+  .mobile-dropdown .notification-dropdown-head h3 {
+    font-size: 0.98rem;
+  }
+
+  .mobile-dropdown .notification-count {
+    min-width: 28px;
+    height: 28px;
+    font-size: 0.78rem;
+  }
+
+  .mobile-dropdown .notification-dropdown-list {
+    gap: 0.6rem;
+    padding-right: 0;
+  }
+
+  .mobile-dropdown .notification-dropdown-card {
+    grid-template-columns: 6px auto 1fr auto;
+    gap: 0.6rem;
+    padding: 0.78rem;
+  }
+
+  .mobile-dropdown .notification-dropdown-card.featured {
+    grid-template-columns: auto 1fr auto;
+    padding: 0.82rem;
+  }
+
+  .mobile-dropdown .notification-copy h4 {
+    font-size: 0.88rem;
+  }
+
+  .mobile-dropdown .notification-copy p {
+    font-size: 0.81rem;
+  }
+
+  .mobile-dropdown .notification-chip-row {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.6rem;
+  }
+
+  .mobile-dropdown .notification-delete-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .mobile-dropdown .notification-view-more-btn {
+    margin-top: 0.65rem;
+    padding: 0.76rem 0.9rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .mobile-dropdown {
+    top: calc(env(safe-area-inset-top, 0px) + 74px);
+    left: 10px;
+    right: 10px;
+    max-height: min(74vh, calc(100dvh - 92px));
+    padding: 0.75rem;
+    border-radius: 18px;
+  }
+
+  .mobile-dropdown .notification-dropdown-card,
+  .mobile-dropdown .notification-dropdown-card.featured {
+    grid-template-columns: auto 1fr;
+    gap: 0.7rem;
+  }
+
+  .mobile-dropdown .notification-tone {
+    display: none;
+  }
+
+  .mobile-dropdown .notification-icon {
+    grid-row: span 2;
+  }
+
+  .mobile-dropdown .notification-copy {
+    min-width: 0;
+  }
+
+  .mobile-dropdown .notification-delete-btn {
+    grid-column: 2;
+    justify-self: end;
+  }
+
+  .mobile-dropdown .notification-copy h4 {
+    line-height: 1.3;
   }
 }
