@@ -73,6 +73,7 @@ function determineEventStatus(event, isRegistered) {
 function mapDashboardEvent(event, registeredSet) {
   const eventDate = event.dateTime ? new Date(event.dateTime) : null;
   const isRegistered = registeredSet.has(String(event._id));
+  const registrationDeadlineDate = event.registrationDeadline ? new Date(event.registrationDeadline) : null;
 
   return {
     id: String(event._id),
@@ -81,6 +82,11 @@ function mapDashboardEvent(event, registeredSet) {
     category: event.category || "Campus Event",
     location: event.location || "Campus Venue",
     dateTime: event.dateTime,
+    registrationDeadline: event.registrationDeadline || null,
+    registrationDeadlineLabel: registrationDeadlineDate && !Number.isNaN(registrationDeadlineDate.getTime())
+      ? registrationDeadlineDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })
+      : "Not specified",
+    endDate: event.endDate || null,
     dateLabel: eventDate && !Number.isNaN(eventDate.getTime())
       ? eventDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })
       : event.dateTime,
@@ -91,6 +97,9 @@ function mapDashboardEvent(event, registeredSet) {
     organizer: event.organizer || "Campus Event Hub",
     contact: event.contact || "Contact admin",
     status: determineEventStatus(event, isRegistered),
+    isPaid: Boolean(event.isPaid),
+    amount: Number(event.amount || 0),
+    currency: event.currency || "INR",
     registrations: event.registrations || 0,
     maxAttendees: event.maxAttendees ?? null,
     collegeName: event.collegeName || "Campus Event Hub"
@@ -110,6 +119,11 @@ function mapRegistration(registration, event) {
     email: registration.email,
     college: registration.college,
     status: normalizedStatus,
+    paymentRequired: Boolean(registration.paymentRequired),
+    paymentStatus: String(registration.paymentStatus || "NOT_REQUIRED"),
+    paymentVerified: Boolean(registration.paymentVerified),
+    paymentId: registration.paymentId || "",
+    orderId: registration.orderId || "",
     rejectionReason: registration.rejectionReason || "",
     approvedAt: registration.approvedAt || null,
     rejectedAt: registration.rejectedAt || null,
@@ -126,6 +140,9 @@ function mapRegistration(registration, event) {
       category: event.category,
       posterDataUrl: event.posterDataUrl || null,
       status: event.status,
+      isPaid: Boolean(event.isPaid),
+      amount: Number(event.amount || 0),
+      currency: event.currency || "INR",
       registrations: event.registrations || 0,
       maxAttendees: event.maxAttendees ?? null,
       dateLabel: eventDate && !Number.isNaN(eventDate.getTime())
@@ -272,13 +289,17 @@ function buildStudentNotifications(user, registrations, events, eventMap, approv
 }
 
 async function buildStudentDashboardPayload(userId) {
-  const [user, details, events, registrations, supportQueries, commentReplyNotifications] = await Promise.all([
-    User.findById(userId).select("-password"),
+  const [user, details, events, registrations] = await Promise.all([
+    User.findById(userId).select("-password").lean(),
     StudentProfileDetails.findOne({ user: userId }).lean(),
-    Event.find().sort({ createdAt: -1 }),
-    Registration.find({ studentId: String(userId) }).sort({ createdAt: -1 }),
-    StudentQuery.find({ student: userId, deletedAt: null }).sort({ updatedAt: -1 }).limit(10).lean(),
-    buildReplyNotificationsForUser(userId, 12)
+    Event.find()
+      .select("name description category location dateTime registrationDeadline endDate posterDataUrl organizer contact status registrations maxAttendees collegeName createdAt isPaid amount currency")
+      .sort({ createdAt: -1 })
+      .lean(),
+    Registration.find({ studentId: String(userId) })
+      .select("eventId eventName studentId studentName email college status paymentRequired paymentStatus paymentVerified paymentId orderId rejectionReason approvedAt rejectedAt createdAt updatedAt")
+      .sort({ createdAt: -1 })
+      .lean()
   ]);
 
   if (!user) {
@@ -319,7 +340,7 @@ async function buildStudentDashboardPayload(userId) {
   const approvedCount = registrations.filter((item) => normalizeRegistrationStatus(item.status) === "APPROVED").length;
   const pendingCount = registrations.filter((item) => normalizeRegistrationStatus(item.status) === "PENDING").length;
 
-  const notificationsResponse = await getNotificationsForUser(userId, { page: 1, limit: 15 });
+  const notificationsResponse = await getNotificationsForUser(userId, { page: 1, limit: 8 });
 
   return {
     profile: buildMergedStudentProfile(user, details),

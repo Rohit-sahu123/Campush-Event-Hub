@@ -159,17 +159,9 @@ localStorage.setItem('role', res.role);
         this.router.navigate(['/super-admin-dashboard']);
       } else {
         this.studentDashboardService.resetDashboardState();
-        this.studentDashboardService.refreshDashboardSnapshot().subscribe({
-          next: () => {
-            this.isLoggingIn = false;
-            this.router.navigate(['/student-dashboard']);
-          },
-          error: (dashboardError) => {
-            console.error('Student dashboard preload failed', dashboardError);
-            this.isLoggingIn = false;
-            this.errorMessage = '';
-            this.router.navigate(['/student-dashboard']);
-          }
+        this.isLoggingIn = false;
+        this.router.navigate(['/student-dashboard']).then(() => {
+          this.studentDashboardService.prefetchDashboard();
         });
       }
     },

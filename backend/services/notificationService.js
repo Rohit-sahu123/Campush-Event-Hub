@@ -6,6 +6,9 @@ const StudentQuery = require("../models/StudentQuery");
 const { buildReplyNotificationsForUser } = require("../controllers/eventCommentController");
 const { getCollegeScopedEventIds } = require("../utils/adminCollegeScope");
 
+const NOTIFICATION_SYNC_TTL_MS = 30 * 1000;
+const notificationSyncState = new Map();
+
 function normalizeText(value) {
   return String(value || "").trim().toLowerCase();
 }
@@ -312,6 +315,29 @@ async function syncNotificationsForUser(userId) {
   return { role, seeds };
 }
 
+function setNotificationSyncState(userId, role) {
+  notificationSyncState.set(String(userId), {
+    role: normalizeRole(role),
+    syncedAt: Date.now()
+  });
+}
+
+async function ensureNotificationsForUser(userId, force = false) {
+  const normalizedUserId = String(userId || "");
+  if (!normalizedUserId) {
+    return { role: "student", seeds: [] };
+  }
+
+  const cachedState = notificationSyncState.get(normalizedUserId);
+  if (!force && cachedState && Date.now() - cachedState.syncedAt < NOTIFICATION_SYNC_TTL_MS) {
+    return { role: cachedState.role, seeds: [] };
+  }
+
+  const synced = await syncNotificationsForUser(normalizedUserId);
+  setNotificationSyncState(normalizedUserId, synced.role);
+  return synced;
+}
+
 async function getNotificationsForUser(userId, options = {}) {
   const normalizedUserId = String(userId || "");
   const page = Math.max(1, Number(options.page || 1));
@@ -319,7 +345,7 @@ async function getNotificationsForUser(userId, options = {}) {
   const unseenOnly = options.unseenOnly === true;
   const skip = (page - 1) * limit;
 
-  const { role } = await syncNotificationsForUser(normalizedUserId);
+  const { role } = await ensureNotificationsForUser(normalizedUserId);
 
   const baseFilter = {
     userId: normalizedUserId,
@@ -354,7 +380,7 @@ async function getNotificationsForUser(userId, options = {}) {
 
 async function getUnseenNotificationCount(userId) {
   const normalizedUserId = String(userId || "");
-  const { role } = await syncNotificationsForUser(normalizedUserId);
+  const { role } = await ensureNotificationsForUser(normalizedUserId);
   return Notification.countDocuments({
     userId: normalizedUserId,
     role,
@@ -365,16 +391,17 @@ async function getUnseenNotificationCount(userId) {
 
 async function markAllNotificationsSeen(userId) {
   const normalizedUserId = String(userId || "");
-  const { role } = await syncNotificationsForUser(normalizedUserId);
+  const { role } = await ensureNotificationsForUser(normalizedUserId);
   await Notification.updateMany(
     { userId: normalizedUserId, role, deletedAt: null, isSeen: false },
     { $set: { isSeen: true, updatedAt: new Date() } }
   );
+  setNotificationSyncState(normalizedUserId, role);
 }
 
 async function markNotificationsSeenState(userId, ids, isSeen) {
   const normalizedUserId = String(userId || "");
-  const { role } = await syncNotificationsForUser(normalizedUserId);
+  const { role } = await ensureNotificationsForUser(normalizedUserId);
   const normalizedIds = (ids || [])
     .map((id) => String(id || "").trim())
     .filter((id) => /^[0-9a-fA-F]{24}$/.test(id));
@@ -393,12 +420,13 @@ async function markNotificationsSeenState(userId, ids, isSeen) {
     { $set: { isSeen: Boolean(isSeen), updatedAt: new Date() } }
   );
 
+  setNotificationSyncState(normalizedUserId, role);
   return Number(result.modifiedCount || 0);
 }
 
 async function deleteNotificationById(userId, id) {
   const normalizedUserId = String(userId || "");
-  const { role } = await syncNotificationsForUser(normalizedUserId);
+  const { role } = await ensureNotificationsForUser(normalizedUserId);
   if (!/^[0-9a-fA-F]{24}$/.test(String(id || ""))) {
     return false;
   }
@@ -413,12 +441,13 @@ async function deleteNotificationById(userId, id) {
     { $set: { deletedAt: new Date(), updatedAt: new Date() } }
   );
 
+  setNotificationSyncState(normalizedUserId, role);
   return Number(result.modifiedCount || 0) > 0;
 }
 
 async function deleteNotifications(userId, ids, deleteAll = false, unseenOnly = false) {
   const normalizedUserId = String(userId || "");
-  const { role } = await syncNotificationsForUser(normalizedUserId);
+  const { role } = await ensureNotificationsForUser(normalizedUserId);
   const filter = {
     userId: normalizedUserId,
     role,
@@ -446,6 +475,7 @@ async function deleteNotifications(userId, ids, deleteAll = false, unseenOnly = 
     { $set: { deletedAt: new Date(), updatedAt: new Date() } }
   );
 
+  setNotificationSyncState(normalizedUserId, role);
   return Number(result.modifiedCount || 0);
 }
 

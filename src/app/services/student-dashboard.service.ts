@@ -236,11 +236,10 @@ export class StudentDashboardService {
       const headers = this.authService.getAuthHeaders();
       this.snapshotRequest$ = this.http.get<StudentDashboardSnapshot>(`${this.apiUrl}/student/dashboard`, { headers }).pipe(
         timeout(this.snapshotTimeoutMs),
-        switchMap((snapshot) => this.enrichSnapshotFromDatabaseEvents(snapshot)),
-        switchMap((snapshot) => this.enrichSnapshotWithCommentNotifications(snapshot)),
         catchError(() => this.buildFallbackSnapshot()),
         tap((snapshot) => {
           this.setSnapshotCache(snapshot);
+          this.queueCommentNotificationRefresh(snapshot);
           this.profileRequest$ = undefined;
           this.eventsRequest$ = undefined;
           this.registrationsRequest$ = undefined;
@@ -549,55 +548,6 @@ export class StudentDashboardService {
     return this.http.get<EventCommentReplyNotification[]>(`${this.apiUrl}/event-comments/notifications/me`, { headers }).pipe(
       catchError(() => of([]))
     );
-  }
-
-  private enrichSnapshotFromDatabaseEvents(snapshot: StudentDashboardSnapshot): Observable<StudentDashboardSnapshot> {
-    return this.eventService.fetchEvents().pipe(
-      timeout(this.secondaryTimeoutMs),
-      map((dbEvents) => ({
-        ...snapshot,
-        events: this.mergeEventsWithDatabase(snapshot.events || [], dbEvents || [])
-      })),
-      catchError(() => of(snapshot))
-    );
-  }
-
-  private mergeEventsWithDatabase(events: StudentEventCard[], dbEvents: BackendEvent[]): StudentEventCard[] {
-    const eventById = new Map<string, BackendEvent>();
-    for (const dbEvent of dbEvents) {
-      eventById.set(String(dbEvent.id), dbEvent);
-    }
-
-    return events.map((event) => {
-      const dbEvent = eventById.get(String(event.id));
-      if (!dbEvent) {
-        return event;
-      }
-
-      const registrationDeadline = dbEvent.registrationDeadline ?? event.registrationDeadline ?? null;
-      const deadlineDate = registrationDeadline ? new Date(registrationDeadline) : null;
-      const registrationDeadlineLabel = deadlineDate && !Number.isNaN(deadlineDate.getTime())
-        ? deadlineDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-        : event.registrationDeadlineLabel || 'Not specified';
-      const eventDate = dbEvent.dateTime ? new Date(dbEvent.dateTime) : null;
-
-      return {
-        ...event,
-        dateTime: dbEvent.dateTime || event.dateTime,
-        dateLabel: eventDate && !Number.isNaN(eventDate.getTime())
-          ? eventDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-          : event.dateLabel,
-        timeLabel: eventDate && !Number.isNaN(eventDate.getTime())
-          ? eventDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
-          : event.timeLabel,
-        registrationDeadline,
-        registrationDeadlineLabel,
-        isPaid: dbEvent.isPaid === true,
-        amount: Number(dbEvent.amount || 0),
-        currency: dbEvent.currency || 'INR',
-        priceLabel: dbEvent.isPaid ? `${dbEvent.currency || 'INR'} ${Number(dbEvent.amount || 0).toFixed(2)}` : 'Free'
-      };
-    });
   }
 
   invalidateDashboardCache(): void {
@@ -1182,6 +1132,15 @@ export class StudentDashboardService {
       })),
       catchError(() => of(snapshot))
     );
+  }
+
+  private queueCommentNotificationRefresh(snapshot: StudentDashboardSnapshot): void {
+    this.enrichSnapshotWithCommentNotifications(snapshot).subscribe({
+      next: (enhancedSnapshot) => {
+        this.setSnapshotCache(enhancedSnapshot);
+      },
+      error: () => undefined
+    });
   }
 
   private mergeNotifications(

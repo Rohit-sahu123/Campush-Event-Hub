@@ -1,22 +1,28 @@
 import { Routes } from '@angular/router';
-import { Registerpage } from './registerpage/registerpage';
-import { Loginpage } from './loginpage/loginpage';
-import { Homepage } from './homepage/homepage';
-// import { StudentDashboardComponent } from './student-dashboard/student-dashboard';
-import { AdminDashboard } from './admin-dashboard/admin-dashboard';
-import { AdminProfilePageComponent } from './admin-profile/admin-profile-page';
-import { SuperAdminDashboard } from './super-admin-dashboard/super-admin-dashboard';
-import { SignupSuccessComponent } from './signup-success/signup-success.component';
 import { roleGuard } from './role/role';
-import { AdminApprovalPendingComponent } from './admin-approval-pending/admin-approval-pending.component';
 
 export const routes: Routes = [
-  { path: '', component: Homepage },
+  {
+    path: '',
+    loadComponent: () => import('./homepage/homepage').then(m => m.Homepage)
+  },
 
-  { path: 'register', component: Registerpage },
-  { path: 'login', component: Loginpage },
-  { path: 'signup-success', component: SignupSuccessComponent },
-  { path: 'admin-approval-pending', component: AdminApprovalPendingComponent },
+  {
+    path: 'register',
+    loadComponent: () => import('./registerpage/registerpage').then(m => m.Registerpage)
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./loginpage/loginpage').then(m => m.Loginpage)
+  },
+  {
+    path: 'signup-success',
+    loadComponent: () => import('./signup-success/signup-success.component').then(m => m.SignupSuccessComponent)
+  },
+  {
+    path: 'admin-approval-pending',
+    loadComponent: () => import('./admin-approval-pending/admin-approval-pending.component').then(m => m.AdminApprovalPendingComponent)
+  },
 
   {
     path: 'student-dashboard',
@@ -26,13 +32,13 @@ export const routes: Routes = [
 
   {
     path: 'admin-dashboard',
-    component: AdminDashboard,
+    loadComponent: () => import('./admin-dashboard/admin-dashboard').then(m => m.AdminDashboard),
     canActivate: [roleGuard('college_admin')]
   },
 
   {
     path: 'admin-profile',
-    component: AdminProfilePageComponent,
+    loadComponent: () => import('./admin-profile/admin-profile-page').then(m => m.AdminProfilePageComponent),
     canActivate: [roleGuard('college_admin')]
   },
   {
@@ -68,7 +74,7 @@ export const routes: Routes = [
 
   {
     path: 'super-admin-dashboard',
-    component: SuperAdminDashboard,
+    loadComponent: () => import('./super-admin-dashboard/super-admin-dashboard').then(m => m.SuperAdminDashboard),
     canActivate: [roleGuard('super_admin')]
   },
 

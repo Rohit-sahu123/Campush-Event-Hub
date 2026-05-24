@@ -35,6 +35,8 @@ interface DashboardStat {
 })
 export class StudentDashboardPageComponent implements OnInit {
   private static readonly DROPDOWN_NOTIFICATION_LIMIT = 7;
+  private static readonly NOTIFICATION_REFRESH_MS = 30000;
+  private static readonly RATING_REFRESH_MS = 30000;
   profile: StudentProfile | null = null;
   allEvents: StudentEventCard[] = [];
   filteredEvents: StudentEventCard[] = [];
@@ -117,7 +119,6 @@ export class StudentDashboardPageComponent implements OnInit {
     });
     this.prefillFromCache();
     this.loadDashboard();
-    this.loadNotificationDropdown();
     this.loadSupportQuery();
     this.startNotificationsRefresh();
     this.startRatingsRefresh();
@@ -205,6 +206,9 @@ export class StudentDashboardPageComponent implements OnInit {
   loadDashboard(): void {
     this.errorMessage = '';
     const hasWarmCache = !!this.studentDashboardService.getCachedSnapshot();
+    const snapshotRequest$ = hasWarmCache
+      ? this.studentDashboardService.refreshDashboardSnapshot()
+      : this.studentDashboardService.getDashboardSnapshot();
     if (!hasWarmCache) {
       this.loading = true;
       this.registrationsLoading = true;
@@ -213,7 +217,7 @@ export class StudentDashboardPageComponent implements OnInit {
       this.silentRefreshing = true;
     }
 
-    this.studentDashboardService.refreshDashboardSnapshot().pipe(
+    snapshotRequest$.pipe(
       timeout(9000)
     ).subscribe({
       next: (snapshot) => {
@@ -850,7 +854,7 @@ export class StudentDashboardPageComponent implements OnInit {
   private startNotificationsRefresh(): void {
     this.notificationsRefreshTimer = setInterval(() => {
       this.loadNotificationDropdown();
-    }, 8000);
+    }, StudentDashboardPageComponent.NOTIFICATION_REFRESH_MS);
   }
 
   private loadNotificationDropdown(): void {
@@ -896,7 +900,7 @@ export class StudentDashboardPageComponent implements OnInit {
   private startRatingsRefresh(): void {
     this.ratingRefreshTimer = setInterval(() => {
       this.loadVisibleEventRatingSummaries(this.allEvents, true);
-    }, 8000);
+    }, StudentDashboardPageComponent.RATING_REFRESH_MS);
   }
 
   private getRatingsStorageKey(): string | null {
