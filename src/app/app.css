@@ -233,3 +233,41 @@ app-site-footer {
     bottom: 12px;
   }
 }
+@media (max-width: 820px) {
+  /* Global admin shell top padding to avoid header overlap */
+  .admin-shell {
+    padding-top: 90px !important;
+  }
+  /* Ensure grid layouts collapse to single column */
+  .admin-shell .dashboard-layout,
+  .admin-shell .page-main,
+  .admin-shell .events-grid,
+  .admin-shell .stat-grid,
+  .admin-shell .panel {
+    width: 100%;
+  }
+  .admin-shell .dashboard-layout,
+  .admin-shell .page-main {
+    grid-template-columns: 1fr !important;
+  }
+  .admin-shell .events-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .admin-shell .view-toggle,
+  .admin-shell .view-toggle-btn,
+  .admin-shell .primary-hero-btn,
+  .admin-shell .secondary-hero-btn,
+  .admin-shell .view-all-btn,
+  .admin-shell .ghost-btn,
+  .admin-shell .solid-btn {
+    width: 100% !important;
+    margin-top: 0.5rem;
+  }
+  .admin-shell .panel-head,
+  .admin-shell .page-header,
+  .admin-shell .registrations-cta,
+  .admin-shell .reg-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

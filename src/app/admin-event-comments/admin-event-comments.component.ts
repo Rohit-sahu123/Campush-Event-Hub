@@ -409,7 +409,7 @@ export class AdminEventCommentsComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin-dashboard']);
   }
 
-  handleTabChange(tab: 'overview' | 'events' | 'analytics' | 'registrations' | 'feedback' | 'approvedStudents' | 'queries' | 'attendance'): void {
+  handleTabChange(tab: 'overview' | 'events' | 'analytics' | 'registrations' | 'feedback' | 'approvedStudents' | 'queries' | 'attendance' | 'myEvents' | 'payments'): void {
     this.router.navigate(['/admin-dashboard'], { queryParams: { tab } });
   }
 

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { Auth } from '../../auth/auth';
 
@@ -38,10 +38,26 @@ export class StudentHeaderComponent {
   @Output() viewMoreNotifications = new EventEmitter<void>();
   @Output() notificationDelete = new EventEmitter<string>();
 
+  mobileMenuOpen: boolean = false;
+
   constructor(
     private router: Router,
     private auth: Auth
   ) {}
+
+  toggleMobileMenu(event?: Event): void {
+    event?.stopPropagation();
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen = false;
+  }
+
+  @HostListener('document:click')
+  closeMobileMenuOnOutsideClick(): void {
+    this.closeMobileMenu();
+  }
 
   get notificationCount(): number {
     return this.notifications.length;

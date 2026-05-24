@@ -61,6 +61,7 @@ export class StudentDashboardPageComponent implements OnInit {
   selectedCategory = 'All';
   selectedCollege = 'All';
   selectedDate = '';
+  showFilters = false;
   loading = true;
   registrationsLoading = true;
   notificationsLoading = true;
@@ -261,6 +262,10 @@ export class StudentDashboardPageComponent implements OnInit {
     this.selectedCollege = 'All';
     this.selectedDate = '';
     this.applyFilters();
+  }
+
+  toggleFilters(): void {
+    this.showFilters = !this.showFilters;
   }
 
   navigateTab(tab: 'dashboard' | 'events' | 'registrations' | 'feedback'): void {

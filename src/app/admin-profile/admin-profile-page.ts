@@ -301,7 +301,7 @@ export class AdminProfilePageComponent implements OnInit {
     this.router.navigate(['/admin-dashboard']);
   }
 
-  handleTabChange(tab: 'overview' | 'events' | 'analytics' | 'registrations' | 'feedback' | 'approvedStudents' | 'queries' | 'attendance'): void {
+  handleTabChange(tab: 'overview' | 'events' | 'analytics' | 'registrations' | 'feedback' | 'approvedStudents' | 'queries' | 'attendance' | 'myEvents' | 'payments'): void {
     if (tab === 'registrations') {
       this.router.navigate(['/admin-registration-details']);
       return;

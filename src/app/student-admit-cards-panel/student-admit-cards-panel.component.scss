@@ -226,6 +226,40 @@
 
 @media (max-width: 940px) {
   .admit-overview {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+  
+  .overview-card {
+    padding: 0.65rem 0.75rem;
+  }
+
+  .overview-card strong {
+    font-size: 1.25rem;
+    margin-top: 0.2rem;
+  }
+
+  .overview-card span {
+    font-size: 0.68rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admit-overview {
+    gap: 0.4rem;
+  }
+
+  .overview-card {
+    padding: 0.5rem 0.6rem;
+    border-radius: 12px;
+  }
+
+  .overview-card strong {
+    font-size: 1.15rem;
+  }
+
+  .overview-card span {
+    font-size: 0.62rem;
+    letter-spacing: 0.02em;
   }
 }

@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
-export type AdminHeaderTab = 'overview' | 'events' | 'registrations' | 'none';
+export type AdminHeaderTab = 'overview' | 'events' | 'registrations' | 'payments' | 'analytics' | 'feedback' | 'approvedStudents' | 'queries' | 'attendance' | 'myEvents' | 'none';
 
 export interface AdminHeaderNotification {
   id: string;
@@ -53,6 +53,22 @@ export class AdminCommonHeaderComponent {
   @Output() notificationDelete = new EventEmitter<string>();
   @Output() exportTriggered = new EventEmitter<void>();
   @Output() logoutTriggered = new EventEmitter<void>();
+
+  mobileMenuOpen = false;
+
+  toggleMobileMenu(event?: Event): void {
+    event?.stopPropagation();
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen = false;
+  }
+
+  @HostListener('document:click')
+  closeMobileMenuOnOutsideClick(): void {
+    this.closeMobileMenu();
+  }
 
   setTab(tab: Exclude<AdminHeaderTab, 'none'>): void {
     this.activeTabChange.emit(tab);

@@ -1,4 +1,4 @@
-﻿<div class="app student-shell admin-shell" [class.dark]="isDarkMode">
+<div class="app student-shell admin-shell" [class.dark]="isDarkMode">
   <app-admin-common-header
     [activeTab]="activeTab === 'events' ? 'events' : activeTab === 'registrations' || activeTab === 'payments' || activeTab === 'queries' || activeTab === 'attendance' ? 'registrations' : 'overview'"
     [userName]="userName"
@@ -10,7 +10,7 @@
     [notifications]="notifications"
     [showViewMore]="showNotificationViewMore"
     (brandClick)="setTab('overview')"
-    (activeTabChange)="setTab($event)"
+    (activeTabChange)="handleHeaderTabChange($event)"
     (searchTriggered)="onDashboardSearchClick()"
     (notificationsTriggered)="toggleNotifications()"
     (viewMoreNotifications)="openNotificationsPage()"

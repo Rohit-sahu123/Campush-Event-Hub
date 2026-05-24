@@ -9,7 +9,7 @@ import { isEventClosedByDate, parseEventLocalDay, resolveEventDateCandidate } fr
 import { AdminCommonHeaderComponent } from '../shared/admin-common-header/admin-common-header.component';
 import { Auth } from '../auth/auth';
 
-type DashboardTab = 'overview' | 'events' | 'payments' | 'analytics' | 'registrations' | 'feedback' | 'approvedStudents' | 'queries' | 'attendance';
+type DashboardTab = 'overview' | 'events' | 'payments' | 'analytics' | 'registrations' | 'feedback' | 'approvedStudents' | 'queries' | 'attendance' | 'myEvents';
 
 @Component({
   selector: 'app-admin-old-events',

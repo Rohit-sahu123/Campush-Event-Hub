@@ -81,7 +81,7 @@ export class NotificationInboxPageComponent implements OnInit, OnDestroy {
     this.notificationsOpen = false;
   }
 
-  onAdminHeaderTabChange(tab: 'overview' | 'events' | 'registrations'): void {
+  onAdminHeaderTabChange(tab: 'events' | 'overview' | 'registrations' | 'payments' | 'analytics' | 'feedback' | 'approvedStudents' | 'queries' | 'attendance' | 'myEvents'): void {
     if (tab === 'overview') {
       this.router.navigate(['/admin-dashboard']);
       return;

@@ -21,7 +21,7 @@ import { AdminPaymentDetailsComponent } from '../admin-payment-details/admin-pay
 import { AdminAttendanceManagementComponent } from '../admin-attendance-management/admin-attendance-management.component';
 import { AppNotification, NotificationService } from '../services/notification.service';
 
-type DashboardTab = 'overview' | 'events' | 'payments' | 'analytics' | 'registrations' | 'feedback' | 'approvedStudents' | 'queries' | 'attendance';
+type DashboardTab = 'overview' | 'events' | 'payments' | 'analytics' | 'registrations' | 'feedback' | 'approvedStudents' | 'queries' | 'attendance' | 'myEvents';
 
 interface OrganizerEvent {
   id: string;
@@ -331,6 +331,14 @@ export class AdminDashboard implements OnInit, OnDestroy {
     if (tab === 'queries' && !this.queryBootstrapDone && !this.queryLoading) {
       this.fetchCollegeQueries();
     }
+  }
+
+  handleHeaderTabChange(tab: string): void {
+    if (tab === 'myEvents') {
+      this.goToMyEvents();
+      return;
+    }
+    this.setTab(tab as DashboardTab);
   }
 
   get isSidebarVisible(): boolean {

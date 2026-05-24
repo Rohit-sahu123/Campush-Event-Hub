@@ -26,14 +26,13 @@
         class="sidebar-link"
         [class.active]="activeTab === item.key"
         [attr.aria-label]="item.label"
-        [attr.title]="collapsed ? item.label : null"
         (click)="triggerNav(item)"
       >
         <span class="sidebar-link-icon material-icons" aria-hidden="true">{{ item.icon }}</span>
-        <span class="sidebar-link-copy">
+        <div class="sidebar-link-copy">
           <span class="sidebar-link-label">{{ item.label }}</span>
           <span class="sidebar-link-caption">{{ item.caption }}</span>
-        </span>
+        </div>
       </button>
 
       <button
@@ -42,22 +41,24 @@
         class="sidebar-link"
         [class.active]="activeTab === item.key"
         [attr.aria-label]="item.label"
-        [attr.title]="collapsed ? item.label : null"
         (click)="triggerNav(item)"
       >
         <span class="sidebar-link-icon material-icons" aria-hidden="true">{{ item.icon }}</span>
-        <span class="sidebar-link-copy">
+        <div class="sidebar-link-copy">
           <span class="sidebar-link-label">{{ item.label }}</span>
           <span class="sidebar-link-caption">{{ item.caption }}</span>
-        </span>
+        </div>
       </button>
-    </nav>
 
-    <div class="sidebar-cta">
-      <button type="button" class="sidebar-link accent" [attr.title]="collapsed ? 'Create Event' : null" (click)="createEvent.emit()">
-        <span class="material-icons" aria-hidden="true">add_circle</span>
+      <button
+        type="button"
+        class="sidebar-link accent"
+        (click)="createEvent.emit()"
+        aria-label="Create Event"
+      >
+        <span class="sidebar-link-icon material-icons" aria-hidden="true">add_circle</span>
         <span>Create Event</span>
       </button>
-    </div>
+    </nav>
   </div>
 </aside>

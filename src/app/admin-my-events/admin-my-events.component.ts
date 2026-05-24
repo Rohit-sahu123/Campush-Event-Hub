@@ -15,7 +15,7 @@ import { AdminCommonHeaderComponent } from '../shared/admin-common-header/admin-
 import { buildAdminProfileIdentifiers, filterEventsOwnedByAdmin } from '../shared/admin-owned-events.util';
 import { AuthService } from '../services/auth.service';
 
-type DashboardTab = 'overview' | 'events' | 'payments' | 'analytics' | 'registrations' | 'feedback' | 'approvedStudents' | 'queries' | 'attendance';
+type DashboardTab = 'overview' | 'events' | 'payments' | 'analytics' | 'registrations' | 'feedback' | 'approvedStudents' | 'queries' | 'attendance' | 'myEvents';
 
 @Component({
   selector: 'app-admin-my-events',

@@ -57,6 +57,20 @@
   box-shadow: var(--shadow);
 }
 
+@media (max-width: 820px) {
+  .app {
+    padding: 112px 16px 40px;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding: 112px 12px 40px;
+    border-radius: 12px;
+  }
+}
+
 .bg-orb {
   position: absolute;
   border-radius: 50%;
@@ -469,15 +483,22 @@
 .layout {
   margin-top: 14px;
   display: grid;
-  grid-template-columns: 118px minmax(0, 1fr);
+  grid-template-columns: 240px minmax(0, 1fr);
   gap: 18px;
   position: relative;
   z-index: 1;
   align-items: start;
 }
 
-.layout.sidebar-expanded {
-  grid-template-columns: 220px minmax(0, 1fr);
+.layout.sidebar-collapsed {
+  grid-template-columns: 70px minmax(0, 1fr);
+}
+
+@media (max-width: 820px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 }
 
 .sidebar {
@@ -3434,8 +3455,7 @@
   }
 
   .admin-shell app-admin-dashboard-sidebar {
-    display: block;
-    width: 100%;
+    display: none !important;
   }
 
   .admin-shell .header-inner,
@@ -3477,5 +3497,38 @@
   .admin-shell .ghost-btn,
   .admin-shell .solid-btn {
     width: 100%;
+  }
+}
+@media (max-width: 820px) {
+  .admin-shell {
+    padding-top: 90px !important;
+  }
+  .admin-shell .dashboard-layout {
+    grid-template-columns: 1fr;
+  }
+  .admin-shell .hero-panel,
+  .admin-shell .stat-grid,
+  .admin-shell .panel {
+    width: 100%;
+  }
+  .admin-shell .primary-hero-btn,
+  .admin-shell .secondary-hero-btn,
+  .admin-shell .view-all-btn,
+  .admin-shell .ghost-btn,
+  .admin-shell .solid-btn {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  .admin-shell .stat-grid,
+  .admin-shell .table-head,
+  .admin-shell .table-row {
+    grid-template-columns: 1fr;
+  }
+  .admin-shell .panel-head,
+  .admin-shell .page-header,
+  .admin-shell .registrations-cta,
+  .admin-shell .reg-item {
+    flex-direction: column;
+    align-items: stretch;
   }
 }

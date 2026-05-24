@@ -938,139 +938,217 @@ form > .link { animation-delay: 0.56s; }
   }
 }
 
-@media (max-width: 1024px) {
-  .auth-shell {
-    width: 100%;
-  }
-
-  .auth-layout {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "form"
-      "highlight";
-    animation: layoutIn 0.6s ease-out both;
-    transform: none;
-  }
-
-  .card-form {
-    border-right: none;
-    border-bottom: 1px solid rgba(82, 102, 176, 0.15);
-  }
-
-  .card-highlight {
-    min-height: 260px;
-  }
-
-  .auth-layout:hover {
-    transform: none;
-    box-shadow: var(--shadow-1);
-  }
-}
-
-@media (max-width: 700px) {
-  .header-row {
-    min-height: auto;
-    grid-template-columns: 1fr;
-    justify-content: center;
-    align-items: stretch;
-    gap: 12px;
-    padding: 12px 14px;
-    border-radius: 16px;
-  }
-
-  .brand-block,
-  .nav-actions {
-    justify-content: center;
-  }
-
-  .brand-block {
-    width: 100%;
-  }
-
-  .brand-copy {
-    text-align: center;
-  }
-
-  .nav-actions {
-    width: 100%;
-    flex-wrap: wrap;
-  }
-
-  .header-btn {
-    flex: 1 1 120px;
-    min-width: 120px;
-  }
-
-  .brand-name {
-    font-size: 1.54rem;
-  }
-
-  .page-content {
-    padding: 148px 12px 30px;
-  }
-
-  .card {
-    padding: 24px 18px;
-  }
-
-  h2 {
-    font-size: 1.75rem;
-  }
-
-  .highlight-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .meta-strip {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 520px) {
+@media (max-width: 991px) {
+  /* Premium Floating Glassmorphic Nav Header */
   .auth-header {
-    position: sticky;
+    position: fixed !important;
+    top: 10px !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: calc(100% - 24px) !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(255, 255, 255, 0.45) !important;
+    background: rgba(255, 255, 255, 0.72) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    box-shadow: 
+      0 12px 32px rgba(18, 31, 63, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+    z-index: 999 !important;
   }
 
   .auth-header::before {
-    inset: 6px 8px 8px;
-    border-radius: 16px;
+    display: none !important; /* Hide old background container */
   }
 
   .header-row {
-    padding: 10px 10px;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    min-height: 68px !important;
+    padding: 8px 12px !important;
+    grid-template-columns: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .brand-block {
+    padding: 6px 10px 6px 6px !important;
+    border-radius: 16px !important;
+    gap: 8px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .brand-block::before,
+  .brand-block::after {
+    display: none !important;
   }
 
   .brand-logo {
-    width: 44px;
-    height: 44px;
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    border: none !important;
+    filter: drop-shadow(0 4px 8px rgba(14, 24, 52, 0.08)) !important;
   }
 
   .brand-name {
-    font-size: 1.32rem;
+    font-size: 1.28rem !important;
+    letter-spacing: -0.04em !important;
   }
 
   .brand-tag {
-    font-size: 0.58rem;
+    display: none !important; /* Hide secondary tagline on mobile headers */
+  }
+
+  .nav-actions {
+    display: flex !important;
+    gap: 6px !important;
+    padding: 2px !important;
+    border-radius: 999px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .header-btn {
+    padding: 8px 14px !important;
+    font-size: 0.88rem !important;
+    border-radius: 12px !important;
+  }
+
+  /* Main container adjustments */
+  .page-content {
+    padding-top: 102px !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  .auth-shell {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .auth-layout {
+    grid-template-columns: 1fr !important;
+    grid-template-areas: "form" !important;
+    gap: 16px !important;
+    transform: none !important;
+  }
+
+  .auth-layout:hover {
+    transform: none !important;
+  }
+
+  /* Form Card upgrades on mobile */
+  .card-form {
+    border-radius: 28px !important;
+    border: 1px solid rgba(255, 255, 255, 0.72) !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 250, 255, 0.95)) !important;
+    box-shadow: 0 24px 48px rgba(32, 54, 128, 0.12) !important;
+    padding: 32px 20px !important;
+    border-right: none !important;
+    border-bottom: none !important;
+  }
+
+  .card-form:hover {
+    transform: none !important;
+    box-shadow: 0 24px 48px rgba(32, 54, 128, 0.12) !important;
+  }
+
+  .auth-form .field-group:hover,
+  .auth-form .password-box:hover,
+  .auth-form .submit-btn:hover {
+    transform: none !important;
+    filter: none !important;
+  }
+
+  /* Highlight Card stacked below */
+  .card-highlight {
+    grid-area: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    border-radius: 28px !important;
+    background: linear-gradient(135deg, #0f1839 0%, #17265c 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 
+      0 24px 48px rgba(16, 32, 60, 0.22),
+      0 0 25px rgba(74, 96, 238, 0.12) !important;
+    padding: 28px 20px !important;
+    min-height: auto !important;
+  }
+
+  .card-highlight h3 {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #ffffff 0%, #ffe5f2 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-size: 1.35rem !important;
+    line-height: 1.32 !important;
+  }
+
+  .card-highlight .highlight-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .card-highlight .highlight-item {
+    padding: 12px !important;
+    border-radius: 14px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  }
+
+  .card-highlight .highlight-item .count {
+    font-size: 1rem !important;
+  }
+
+  .card-highlight .highlight-item .label {
+    font-size: 0.74rem !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .auth-header {
+    top: 8px !important;
+    left: 8px !important;
+    right: 8px !important;
+    width: calc(100% - 16px) !important;
+  }
+
+  .header-row {
+    min-height: 64px !important;
+    padding: 6px 10px !important;
+  }
+
+  .brand-logo {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .brand-name {
+    font-size: 1.2rem !important;
   }
 
   .page-content {
-    padding: 154px 10px 20px;
+    padding-top: 92px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
   }
 
-  .card {
-    padding: 20px 14px;
+  .card-form {
+    padding: 24px 16px !important;
+    border-radius: 24px !important;
   }
 
-  .nav-actions,
-  .header-btn {
-    width: 100%;
-  }
-
-  .header-btn,
-  input,
-  select,
-  button {
-    min-height: 44px;
+  .card-highlight {
+    padding: 24px 16px !important;
+    border-radius: 24px !important;
   }
 }
 

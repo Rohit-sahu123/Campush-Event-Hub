@@ -11,13 +11,15 @@
       </div>
     </button>
 
-    <nav class="header-nav">
+    <!-- Desktop Header Navigation -->
+    <nav class="header-nav desktop-nav">
       <button class="nav-link" [class.active]="activeTab === 'overview'" (click)="setTab('overview')">Dashboard</button>
       <button class="nav-link" [class.active]="activeTab === 'events'" (click)="setTab('events')">Manage Events</button>
       <button class="nav-link" [class.active]="activeTab === 'registrations'" (click)="setTab('registrations')">Registrations</button>
     </nav>
 
-    <div class="header-actions">
+    <!-- Desktop Actions -->
+    <div class="header-actions desktop-actions">
       <div class="notification-wrapper" *ngIf="showNotifications" (click)="$event.stopPropagation()">
         <button class="notification-btn" aria-label="Notifications" title="Notifications" (click)="notificationsTriggered.emit()">
           <span class="material-icons">notifications</span>
@@ -111,5 +113,146 @@
         <span>Logout</span>
       </button>
     </div>
+
+    <!-- Mobile Header Actions (visible on mobile only) -->
+    <div class="mobile-header-actions">
+      <!-- Notification wrapper (compact badge) -->
+      <div class="notification-wrapper mobile-only" *ngIf="showNotifications" (click)="$event.stopPropagation()">
+        <button type="button" class="notification-btn mobile-notification-btn" (click)="notificationsTriggered.emit()" aria-label="Notifications">
+          <span class="material-icons">notifications</span>
+          <span class="notification-badge" *ngIf="unreadNotificationCount > 0">{{ unreadNotificationCount > 99 ? '99+' : unreadNotificationCount }}</span>
+        </button>
+
+        <div class="notification-dropdown mobile-dropdown" *ngIf="notificationsOpen">
+          <div class="notification-dropdown-head">
+            <div>
+              <p>Notifications</p>
+              <h3>Campus pulse</h3>
+            </div>
+            <span class="notification-count">{{ notificationCount }}</span>
+          </div>
+
+          <div *ngIf="notificationsLoading" class="notification-dropdown-state">Loading notifications...</div>
+
+          <div class="notification-dropdown-list" *ngIf="!notificationsLoading && notificationCount > 0">
+            <article class="notification-dropdown-card featured" *ngIf="featuredNotification as featured">
+              <span class="notification-icon material-icons">{{ featured.icon || 'notifications_active' }}</span>
+              <div class="notification-copy">
+                <div class="notification-chip-row">
+                  <span class="notification-category">{{ featured.category || 'registration' }}</span>
+                  <span class="notification-time">{{ featured.timeLabel || formatNotificationTime(featured.createdAt) }}</span>
+                </div>
+                <h4>{{ featured.title || 'Notification' }}</h4>
+                <p>{{ featured.message }}</p>
+              </div>
+              <button
+                type="button"
+                class="notification-delete-btn"
+                aria-label="Delete notification"
+                (click)="onDeleteNotification($event, featured.id)"
+              >
+                <span class="material-icons">delete</span>
+              </button>
+            </article>
+
+            <article class="notification-dropdown-card" *ngFor="let item of remainingNotifications">
+              <span class="notification-tone" [attr.data-tone]="item.tone || 'info'"></span>
+              <span class="notification-icon material-icons">{{ item.icon || 'notifications_active' }}</span>
+              <div class="notification-copy">
+                <div class="notification-chip-row">
+                  <span class="notification-category">{{ item.category || 'general' }}</span>
+                  <span class="notification-time">{{ item.timeLabel || formatNotificationTime(item.createdAt) }}</span>
+                </div>
+                <h4>{{ item.title || 'Notification' }}</h4>
+                <p>{{ item.message }}</p>
+              </div>
+              <button
+                type="button"
+                class="notification-delete-btn"
+                aria-label="Delete notification"
+                (click)="onDeleteNotification($event, item.id)"
+              >
+                <span class="material-icons">delete</span>
+              </button>
+            </article>
+          </div>
+
+          <button
+            type="button"
+            class="notification-view-more-btn"
+            *ngIf="showViewMore && !notificationsLoading"
+            (click)="onViewMore($event)"
+          >
+            View All
+          </button>
+
+          <div class="notification-dropdown-state" *ngIf="!notificationsLoading && notificationCount === 0">
+            No notifications right now.
+          </div>
+        </div>
+      </div>
+
+      <!-- Export button on mobile -->
+      <button *ngIf="showExport" class="icon-btn mobile-export-btn" aria-label="Export" title="Export" (click)="exportTriggered.emit()">
+        <span class="material-icons">download</span>
+      </button>
+
+      <!-- Profile Avatar link on mobile -->
+      <a *ngIf="showProfileLink" class="profile-chip mobile-profile-avatar-btn" routerLink="/admin-profile">
+        <div class="profile-chip-avatar-wrap">
+          <img *ngIf="userAvatarUrl" [src]="userAvatarUrl" alt="Profile photo" />
+          <span *ngIf="!userAvatarUrl" class="profile-chip-fallback">{{ avatarText }}</span>
+        </div>
+      </a>
+
+      <!-- Logout icon button on mobile -->
+      <button *ngIf="showLogout" type="button" class="logout-btn mobile-logout-btn" (click)="logoutTriggered.emit()">
+        <span class="material-icons">logout</span>
+      </button>
+
+      <!-- Three-dots mobile menu toggle -->
+      <button type="button" class="mobile-menu-toggle-btn" [class.active]="mobileMenuOpen" (click)="toggleMobileMenu($event)" aria-label="Open menu">
+        <span class="material-icons">more_vert</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Floating Dropdown Menu (visible when mobileMenuOpen is true) -->
+  <div *ngIf="mobileMenuOpen" class="mobile-menu-dropdown" (click)="$event.stopPropagation()">
+    <nav class="mobile-menu-nav">
+      <button class="mobile-menu-link" [class.active]="activeTab === 'overview'" (click)="setTab('overview'); closeMobileMenu()">
+        <span class="material-icons">space_dashboard</span> Dashboard
+      </button>
+      <button class="mobile-menu-link" [class.active]="activeTab === 'events'" (click)="setTab('events'); closeMobileMenu()">
+        <span class="material-icons">event</span> Manage Events
+      </button>
+      <button class="mobile-menu-link" (click)="setTab('myEvents'); closeMobileMenu()">
+        <span class="material-icons">view_carousel</span> My Events
+      </button>
+      <button class="mobile-menu-link" [class.active]="activeTab === 'payments'" (click)="setTab('payments'); closeMobileMenu()">
+        <span class="material-icons">payments</span> Payment Details
+      </button>
+      <button class="mobile-menu-link" [class.active]="activeTab === 'registrations'" (click)="setTab('registrations'); closeMobileMenu()">
+        <span class="material-icons">fact_check</span> Registrations
+      </button>
+      <button class="mobile-menu-link" [class.active]="activeTab === 'approvedStudents'" (click)="setTab('approvedStudents'); closeMobileMenu()">
+        <span class="material-icons">verified_user</span> Approved Students
+      </button>
+      <button class="mobile-menu-link" [class.active]="activeTab === 'queries'" (click)="setTab('queries'); closeMobileMenu()">
+        <span class="material-icons">contact_support</span> Queries
+      </button>
+      <button class="mobile-menu-link" [class.active]="activeTab === 'attendance'" (click)="setTab('attendance'); closeMobileMenu()">
+        <span class="material-icons">qr_code_scanner</span> Attendance
+      </button>
+      <button class="mobile-menu-link" [class.active]="activeTab === 'feedback'" (click)="setTab('feedback'); closeMobileMenu()">
+        <span class="material-icons">forum</span> Feedback
+      </button>
+      <button class="mobile-menu-link" [class.active]="activeTab === 'analytics'" (click)="setTab('analytics'); closeMobileMenu()">
+        <span class="material-icons">insights</span> Analytics
+      </button>
+      <button class="mobile-menu-link" routerLink="/create-event" (click)="closeMobileMenu()">
+        <span class="material-icons">add_circle</span> Create Event
+      </button>
+    </nav>
   </div>
 </header>

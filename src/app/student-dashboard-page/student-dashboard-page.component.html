@@ -58,10 +58,16 @@
         <div class="signature-heading">
           <h2>Active Events</h2>
         </div>
-        <button type="button" class="view-all-btn" (click)="viewAllEvents()">View All</button>
+        <div class="panel-head-actions">
+          <button type="button" class="toggle-filters-btn" [class.active]="showFilters" (click)="toggleFilters()">
+            <span class="material-icons">filter_list</span>
+            <span>Filters</span>
+          </button>
+          <button type="button" class="view-all-btn" (click)="viewAllEvents()">View All</button>
+        </div>
       </div>
 
-      <div class="filter-bar">
+      <div class="filter-bar" [class.expanded]="showFilters">
         <label class="filter-field">
           <span>Search</span>
           <input type="text" placeholder="Search by title, description, location" [(ngModel)]="searchQuery" (input)="applyFilters()">

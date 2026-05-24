@@ -1,4 +1,4 @@
-*{
+* {
   box-sizing: border-box;
 }
 
@@ -69,10 +69,7 @@ img {
   z-index: 1;
   object-fit: contain;
   filter:
-    drop-shadow(0 0 6px rgba(255, 234, 156, 0.62))
-    drop-shadow(0 0 12px rgba(255, 196, 74, 0.34))
-    drop-shadow(0 0 10px rgba(136, 199, 255, 0.3))
-    drop-shadow(0 8px 16px rgba(0, 0, 0, 0.24));
+    drop-shadow(0 0 6px rgba(255, 234, 156, 0.62)) drop-shadow(0 0 12px rgba(255, 196, 74, 0.34)) drop-shadow(0 0 10px rgba(136, 199, 255, 0.3)) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.24));
 }
 
 .app-logo-badge--74 {
@@ -137,7 +134,7 @@ img {
 }
 
 .student-sidebar-close-btn:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .student-sidebar-close-btn .material-icons {
@@ -145,13 +142,477 @@ img {
 }
 
 @keyframes appLogoGlow {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.86;
     transform: scale(1.03);
   }
+
   50% {
     opacity: 1;
     transform: scale(1.09);
   }
 }
 
+/* ==========================================================================
+   GLOBAL TACTILE FEEDBACK SYSTEM
+   ========================================================================== */
+.card,
+.stat-card,
+.event-card,
+.registration-summary-card,
+.feedback-card,
+.highlight-item,
+.highlight-card,
+.about-feature,
+.quick-question-btn {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease !important;
+}
+
+.card:active,
+.stat-card:active,
+.event-card:active,
+.registration-summary-card:active,
+.feedback-card:active,
+.highlight-item:active,
+.highlight-card:active,
+.about-feature:active,
+.quick-question-btn:active {
+  transform: scale(0.97) !important;
+}
+
+/* ==========================================================================
+   MASTER DASHBOARD MOBILE RESPONSIVENESS
+   ========================================================================== */
+
+@media (max-width: 991px) {
+
+  /* Layout reset to single column block */
+  .layout,
+  .dashboard-layout,
+  .layout.sidebar-expanded {
+    display: block !important;
+    grid-template-columns: 1fr !important;
+    padding-top: 12px !important;
+  }
+
+  .content,
+  .dashboard-main {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  /* Core app wrapper spacing adjustments */
+  .app,
+  .student-shell {
+    padding: 92px 14px 108px !important;
+    /* Spacing to clear floating headers & bottom navs */
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  body {
+    padding-bottom: 96px !important;
+  }
+
+  /* Premium Floating Glassmorphic Topbar Pill */
+  .topbar,
+  app-admin-common-header .topbar,
+  app-student-header .topbar,
+  .topnav-container {
+    position: fixed !important;
+    top: 10px !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: calc(100% - 24px) !important;
+    min-height: 66px !important;
+    height: 66px !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(255, 255, 255, 0.45) !important;
+    background: rgba(255, 255, 255, 0.72) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    box-shadow:
+      0 12px 32px rgba(18, 31, 63, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+    z-index: 999 !important;
+    margin: 0 !important;
+    padding: 6px 12px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+
+  .topbar::after,
+  app-admin-common-header .topbar::after,
+  app-student-header .topbar::after {
+    display: none !important;
+  }
+
+  .brand {
+    gap: 8px !important;
+  }
+
+  .brand-mark {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 10px !important;
+  }
+
+  .brand-title {
+    font-size: 1.12rem !important;
+  }
+
+  .brand-sub {
+    display: none !important;
+  }
+
+  /* Hide navigation links inside topbar on mobile since they are in the bottom pill nav */
+  .topnav {
+    display: none !important;
+  }
+
+  .top-actions {
+    gap: 6px !important;
+    margin-left: auto !important;
+  }
+
+  .top-search {
+    display: none !important;
+    /* Hide search input on mobile headers to save space */
+  }
+
+  .user-pill {
+    padding: 4px !important;
+  }
+
+  .user-pill span:not(.avatar) {
+    display: none !important;
+    /* Hide user name string, keep avatar only */
+  }
+
+  .logout-btn {
+    padding: 6px 12px !important;
+    font-size: 0.8rem !important;
+  }
+
+  /* Hide raw sidebar head and collapse toggle button */
+  .sidebar-head,
+  .menu-toggle-btn,
+  .sidebar-toggle,
+  .sidebar-collapsed-btn {
+    display: none !important;
+  }
+
+  /* HIDE SIDEBAR ON MOBILE — Navigation moved to three-dot menu in header */
+  .sidebar,
+  app-admin-dashboard-sidebar,
+  app-admin-dashboard-sidebar .sidebar,
+  .app-admin-dashboard-sidebar .sidebar {
+    display: none !important;
+  }
+
+  .sidebar .menu,
+  app-admin-dashboard-sidebar .menu,
+  .app-admin-dashboard-sidebar .menu {
+    display: none !important;
+  }
+
+  /* Stats card grid adaptation */
+  .summary-cards,
+  .stat-grid,
+  .registrations-spotlight,
+  .stats-spotlight {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .card,
+  .stat-card,
+  .registration-summary-card {
+    border-radius: 18px !important;
+    padding: 14px !important;
+    box-shadow: 0 10px 24px rgba(68, 50, 120, 0.08) !important;
+    min-height: auto !important;
+  }
+
+  .stat {
+    height: auto !important;
+    padding: 8px !important;
+    margin-top: 4px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .stat-icon {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .stat h3,
+  .stat-value {
+    font-size: 1.25rem !important;
+  }
+
+  .stat-label,
+  .stat p {
+    font-size: 0.82rem !important;
+  }
+
+  .hero-panel {
+    padding: 24px 16px !important;
+    border-radius: 20px !important;
+    text-align: center !important;
+  }
+
+  .hero-panel h1 {
+    font-size: 1.8rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .hero-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .hero-actions button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Panel components adjustments */
+  .panel {
+    padding: 16px 14px !important;
+    border-radius: 20px !important;
+  }
+
+  .panel-head {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    text-align: center !important;
+  }
+
+  .panel-head button {
+    width: 100% !important;
+  }
+
+  /* Table responsive wrapper */
+  .table-responsive,
+  table {
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Admin Filters Cards */
+  .admin-filters-card,
+  .filter-bar {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    padding: 12px !important;
+    border-radius: 16px !important;
+  }
+
+  .filter-actions {
+    grid-column: auto !important;
+    width: 100% !important;
+  }
+
+  .clear-filter-btn {
+    width: 100% !important;
+    padding: 10px !important;
+  }
+
+  /* Support Query compose and compose card adjustments */
+  .query-layout {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .registrations-cta {
+    flex-direction: column !important;
+    gap: 14px !important;
+    text-align: center !important;
+  }
+
+  .registrations-cta button {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 560px) {
+  /* Collapse stats to single column on very narrow smart viewports */
+  .summary-cards, 
+  .stat-grid,
+  .registrations-spotlight,
+  .stats-spotlight {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ==========================================================================
+   SUBPAGE COMPONENT MOBILE RESPONSIVENESS OVERRIDES
+   ========================================================================== */
+
+@media (max-width: 991px) {
+  /* Stack all split-column details, edit sections, and side layouts */
+  .profile-grid, 
+  .form-grid, 
+  .form-row, 
+  .event-form-grid, 
+  .details-grid,
+  .details-layout,
+  .layout-split,
+  .split-container,
+  .event-details-layout,
+  .query-layout,
+  .feedback-layout,
+  .composer-wrapper {
+    grid-template-columns: 1fr !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  /* Compact padding for subpage cards & detail containers */
+  .profile-container, 
+  .profile-card, 
+  .details-container, 
+  .event-details-card,
+  .admit-card-container,
+  .feedback-card,
+  .comment-compose-card,
+  .query-compose-card {
+    padding: 16px 12px !important;
+    border-radius: 20px !important;
+  }
+  
+  /* Upload / Photo Profile layouts */
+  .profile-photo-section,
+  .photo-upload-wrapper,
+  .photo-actions {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 12px !important;
+  }
+  
+  /* General text fields adjustments */
+  .form-group, 
+  .field,
+  .input-field,
+  .form-field {
+    margin-bottom: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex-basis: 100% !important;
+  }
+
+  input, 
+  select, 
+  textarea, 
+  button {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* General popup card overrides */
+  .popup-card, 
+  .modal-card, 
+  .dialog-card,
+  .popup-card-content,
+  .modal-content-wrapper {
+    width: calc(100% - 24px) !important;
+    margin: 12px !important;
+    padding: 20px 14px !important;
+    border-radius: 24px !important;
+  }
+
+  /* Universal grid card stackers */
+  .event-grid, 
+  .grid, 
+  .admins-grid, 
+  .students-grid, 
+  .moderator-grid, 
+  .card-grid, 
+  .grid-layout,
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+}
+
+/* ==========================================================================
+   UNIVERSAL TABLE-TO-CARD RESPONSIVE CONVERTER
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Morph all table items into vertical cards for mobile viewports */
+  table, 
+  thead, 
+  tbody, 
+  th, 
+  td, 
+  tr,
+  .responsive-table {
+    display: block !important;
+  }
+  
+  thead tr {
+    position: absolute !important;
+    top: -9999px !important;
+    left: -9999px !important;
+  }
+  
+  tr {
+    border: 1px solid rgba(120, 102, 170, 0.16) !important;
+    border-radius: 18px !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    padding: 12px !important;
+    margin-bottom: 14px !important;
+    box-shadow: 0 10px 24px rgba(68, 50, 120, 0.05) !important;
+  }
+  
+  td {
+    border: none !important;
+    border-bottom: 1px solid rgba(120, 102, 170, 0.08) !important;
+    position: relative !important;
+    padding: 8px 4px !important;
+    min-height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    text-align: right !important;
+  }
+  
+  td:last-child {
+    border-bottom: 0 !important;
+  }
+  
+  td::before {
+    content: attr(data-label) !important;
+    font-weight: 700 !important;
+    color: #7b7691 !important;
+    text-transform: uppercase !important;
+    font-size: 0.74rem !important;
+    letter-spacing: 0.02em !important;
+    margin-right: 12px !important;
+    text-align: left !important;
+  }
+}

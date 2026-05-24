@@ -764,14 +764,85 @@
     grid-template-columns: 1fr;
   }
 
+  /* Corrected to 2 columns inline on mobile */
   .card-actions {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.5rem !important;
+    margin-top: auto !important;
+  }
+  
+  .view-btn,
+  .register-btn {
+    padding: 0.55rem 0.4rem !important;
+    font-size: 0.85rem !important;
+    border-radius: 12px !important;
   }
 
+  /* Corrected title, price badge, and ratings side-by-side */
   .title-row {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 0.35rem;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 0.45rem !important;
+    margin: 0.45rem 0 !important;
+  }
+  
+  .title-row h3 {
+    flex: 1 1 100% !important;
+    font-size: 1.05rem !important;
+    margin: 0 0 0.15rem !important;
+  }
+  
+  .title-row .category-pill {
+    padding: 0.28rem 0.55rem !important;
+    font-size: 0.64rem !important;
+  }
+
+  .title-rating {
+    padding: 0.2rem 0.45rem !important;
+    gap: 0.1rem !important;
+  }
+  
+  .title-rating .material-icons {
+    font-size: 0.8rem !important;
+  }
+  
+  .title-rating-value {
+    font-size: 0.72rem !important;
+  }
+  
+  .title-rating-count {
+    font-size: 0.68rem !important;
+  }
+
+  /* Restructured meta items as 2x2 grid to save space */
+  .meta-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.5rem !important;
+    min-height: auto !important;
+    margin: 0.65rem 0 !important;
+  }
+
+  .meta-list span {
+    font-size: 0.76rem !important;
+    gap: 0.3rem !important;
+    align-items: center !important;
+  }
+  
+  .meta-list .material-icons {
+    font-size: 0.9rem !important;
+  }
+
+  .event-card {
+    min-height: auto !important;
+    padding-bottom: 0.3rem !important;
+  }
+  
+  .event-content p {
+    font-size: 0.82rem !important;
+    line-height: 1.45 !important;
+    -webkit-line-clamp: 2 !important;
   }
 
   .star-btn .material-icons {

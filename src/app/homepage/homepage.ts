@@ -53,6 +53,7 @@ export class Homepage implements OnInit, OnDestroy {
   activeCollegeIndex = 0;
   activeSection = 'home';
   isDraggingColleges = false;
+  mobileMenuOpen = false;
   platformStats = {
     collegesConnected: 0,
     studentsParticipated: 0,
@@ -162,6 +163,17 @@ export class Homepage implements OnInit, OnDestroy {
 
   setActiveSection(section: string) {
     this.activeSection = section;
+    this.closeMobileMenu();
+  }
+
+  toggleMobileMenu() {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+    this.cdr.detectChanges();
+  }
+
+  closeMobileMenu() {
+    this.mobileMenuOpen = false;
+    this.cdr.detectChanges();
   }
 
   pauseCollegeRotation() {

@@ -1,7 +1,7 @@
-﻿<div class="home">
+<div class="home" [class.mobile-menu-active]="mobileMenuOpen">
   <header class="landing-header">
     <div class="header-row">
-      <a routerLink="/" class="brand-block" aria-label="Campus EventHub home">
+      <a routerLink="/" class="brand-block" aria-label="Campus EventHub home" (click)="closeMobileMenu()">
         <img class="brand-logo" src="/icon2.png" alt="Campus Event Hub logo">
         <div class="brand-copy">
           <span class="brand-name">
@@ -11,17 +11,27 @@
         </div>
       </a>
 
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a href="#" class="nav-link" [class.active]="activeSection === 'home'" (click)="setActiveSection('home')">Home</a>
-        <a href="#events" class="nav-link" [class.active]="activeSection === 'events'" (click)="setActiveSection('events')">Events</a>
-        <a href="#colleges" class="nav-link" [class.active]="activeSection === 'colleges'" (click)="setActiveSection('colleges')">Colleges</a>
-        <a href="#about" class="nav-link" [class.active]="activeSection === 'about'" (click)="setActiveSection('about')">About</a>
-        <a href="#contacts" class="nav-link" [class.active]="activeSection === 'contacts'" (click)="setActiveSection('contacts')">Contacts</a>
-      </nav>
+      <!-- Hamburger Menu Button -->
+      <button class="hamburger-btn" [class.open]="mobileMenuOpen" (click)="toggleMobileMenu()" aria-label="Toggle navigation menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
 
-      <div class="nav-actions">
-        <a routerLink="/login" class="header-btn header-btn-secondary">Login</a>
-        <a routerLink="/register" class="header-btn header-btn-primary">Register</a>
+      <!-- Glassmorphic Dropdown / Slide-out mobile-nav-container -->
+      <div class="mobile-nav-container" [class.open]="mobileMenuOpen">
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="#" class="nav-link" [class.active]="activeSection === 'home'" (click)="setActiveSection('home')">Home</a>
+          <a href="#events" class="nav-link" [class.active]="activeSection === 'events'" (click)="setActiveSection('events')">Events</a>
+          <a href="#colleges" class="nav-link" [class.active]="activeSection === 'colleges'" (click)="setActiveSection('colleges')">Colleges</a>
+          <a href="#about" class="nav-link" [class.active]="activeSection === 'about'" (click)="setActiveSection('about')">About</a>
+          <a href="#contacts" class="nav-link" [class.active]="activeSection === 'contacts'" (click)="setActiveSection('contacts')">Contacts</a>
+        </nav>
+
+        <div class="nav-actions">
+          <a routerLink="/login" class="header-btn header-btn-secondary" (click)="closeMobileMenu()">Login</a>
+          <a routerLink="/register" class="header-btn header-btn-primary" (click)="closeMobileMenu()">Register</a>
+        </div>
       </div>
     </div>
   </header>
